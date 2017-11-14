@@ -21,7 +21,7 @@ abstract class UpdateBase
         $baseConfig = require($baseConfigFile);
 
         $className = get_class();
-        $instanceConfigFile = lcfirst(substr($className, strrpos($className, '\\') + 1)) . "php";
+        $instanceConfigFile = lcfirst(substr($className, strrpos($className, '\\') + 1)) . ".php";
         $instanceConfig = require(self::$configDir . DIRECTORY_SEPARATOR . $instanceConfigFile);
 
         $config = array_merge($baseConfig, $instanceConfig, $config);
