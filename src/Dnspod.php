@@ -47,7 +47,7 @@ class Dnspod extends UpdateBase
             'domain' => $this->domain
         );
         // 获取全部的记录
-        $response = Request::post('https://dnsapi.cn/Record.List')
+        $response = Request::post($this->listURL)
             ->body(http_build_query($data))
             ->contentType(Mime::FORM)
             ->send();
@@ -80,7 +80,7 @@ class Dnspod extends UpdateBase
             'change' => 'value',
             'change_to' => $this->getCurrentIP()
         );
-        $response = Request::post('https://dnsapi.cn/Batch.Record.Modify')
+        $response = Request::post($this->updateURL)
             ->body(http_build_query($data))
             ->contentType(Mime::FORM)
             ->send();
