@@ -1,0 +1,15 @@
+{
+  "name": "orzorc/update-dnspod-a-record",
+  "description": "更新dnspod的A记录，用做动态DNS",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "orzorc",
+      "email": "qiucheng48@gmail.com"
+    }
+  ],
+  "require": {
+    "nategood/httpful": "0.2.20"
+  }
+}
