@@ -2,7 +2,10 @@
 
 namespace OrzOrc\DDnsUpdate;
 
-class Dnspod
+use Httpful\Mime;
+use Httpful\Request;
+
+class Dnspod extends UpdateBase
 {
     private $token = '';
 
@@ -44,9 +47,9 @@ class Dnspod
             'domain' => $this->domain
         );
         // 获取全部的记录
-        $response = \Httpful\Request::post('https://dnsapi.cn/Record.List')
+        $response = Request::post('https://dnsapi.cn/Record.List')
             ->body(http_build_query($data))
-            ->contentType(\Httpful\Mime::FORM)
+            ->contentType(Mime::FORM)
             ->send();
 
         if (!$response->hasBody()) {
@@ -77,9 +80,9 @@ class Dnspod
             'change' => 'value',
             'change_to' => $this->getCurrentIP()
         );
-        $response = \Httpful\Request::post('https://dnsapi.cn/Batch.Record.Modify')
+        $response = Request::post('https://dnsapi.cn/Batch.Record.Modify')
             ->body(http_build_query($data))
-            ->contentType(\Httpful\Mime::FORM)
+            ->contentType(Mime::FORM)
             ->send();
         if (!$response->hasBody()) {
             throw new \Exception('更新记录出错');

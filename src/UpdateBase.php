@@ -2,6 +2,9 @@
 
 namespace OrzOrc\DDnsUpdate;
 
+use Httpful\Mime;
+use Httpful\Request;
+
 abstract class UpdateBase
 {
     private $currentIP = '';
@@ -36,8 +39,8 @@ abstract class UpdateBase
     public function getCurrentIP()
     {
         if (empty($this->currentIP)) {
-            $response = \Httpful\Request::get(self::CURRENT_IP_URL)
-                ->expects(\Httpful\Mime::JSON)
+            $response = Request::get(self::CURRENT_IP_URL)
+                ->expects(Mime::JSON)
                 ->send();
 
             $ip = '';
