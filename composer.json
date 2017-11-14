@@ -10,6 +10,12 @@
     }
   ],
   "require": {
-    "nategood/httpful": "0.2.20"
+    "nategood/httpful": "0.2.20",
+    "php": ">=5.6.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "OrzOrc\\DDnsUpdate\\": "src/"
+    }
   }
 }
