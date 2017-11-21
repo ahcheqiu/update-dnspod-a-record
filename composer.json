@@ -13,9 +13,17 @@
     "nategood/httpful": "0.2.20",
     "php": ">=5.6.0"
   },
+  "require-dev": {
+    "phpunit/phpunit": "5.7"
+  },
   "autoload": {
     "psr-4": {
       "OrzOrc\\DDnsUpdate\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "OrzOrc\\DDnsUpdate\\Tests\\": "tests/"
     }
   }
 }

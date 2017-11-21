@@ -2,6 +2,7 @@
 
 namespace OrzOrc\DDnsUpdate;
 
+use Httpful\Exception\ConnectionErrorException;
 use Httpful\Mime;
 use Httpful\Request;
 
@@ -39,6 +40,10 @@ class Dnspod extends UpdateBase
         return $this;
     }
 
+    /**
+     * @return int
+     * @throws \Exception
+     */
     public function update()
     {
         $data = array(
@@ -47,10 +52,14 @@ class Dnspod extends UpdateBase
             'domain' => $this->domain
         );
         // 获取全部的记录
-        $response = Request::post($this->listURL)
-            ->body(http_build_query($data))
-            ->contentType(Mime::FORM)
-            ->send();
+        try {
+            $response = Request::post($this->listURL)
+                ->body(http_build_query($data))
+                ->contentType(Mime::FORM)
+                ->send();
+        } catch (ConnectionErrorException $e) {
+            throw new \Exception("Connection Error When getting record list: " . $e->getMessage());
+        }
 
         if (!$response->hasBody()) {
             throw new \Exception('没有查到DNS记录');
@@ -80,10 +89,14 @@ class Dnspod extends UpdateBase
             'change' => 'value',
             'change_to' => $this->getCurrentIP()
         );
-        $response = Request::post($this->updateURL)
-            ->body(http_build_query($data))
-            ->contentType(Mime::FORM)
-            ->send();
+        try{
+            $response = Request::post($this->updateURL)
+                ->body(http_build_query($data))
+                ->contentType(Mime::FORM)
+                ->send();
+        } catch (ConnectionErrorException $e) {
+            throw new \Exception("Connection Error When getting update record: " . $e->getMessage());
+        }
         if (!$response->hasBody()) {
             throw new \Exception('更新记录出错');
         }

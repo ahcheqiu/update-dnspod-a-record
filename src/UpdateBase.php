@@ -34,11 +34,21 @@ abstract class UpdateBase
         }
     }
 
+    /**
+     * 设置配置的路径
+     *
+     * @param string $path
+     */
     public static function setConfigDir($path)
     {
         self::$configDir = $path;
     }
 
+    /**
+     * 运行更新
+     *
+     * @throws \Exception
+     */
     public function runUpdate()
     {
         $currentIP = $this->getCurrentIP();
@@ -52,6 +62,13 @@ abstract class UpdateBase
         }
     }
 
+    /**
+     * 获取当前本机的外网IP
+     *
+     * @return string
+     * @throws \Exception
+     * @throws \Httpful\Exception\ConnectionErrorException
+     */
     public function getCurrentIP()
     {
         if (empty($this->currentIP)) {
@@ -72,6 +89,11 @@ abstract class UpdateBase
         return $this->currentIP;
     }
 
+    /**
+     * 返回上一次记录的DNS服务器的IP
+     *
+     * @return bool|string
+     */
     public function getRecordIP()
     {
         if (!file_exists($this->currentIPFile)) {
@@ -81,6 +103,14 @@ abstract class UpdateBase
         return file_get_contents($this->currentIPFile);
     }
 
+    /**
+     * 将DNS服务器的IP记录为指定IP
+     *
+     * @param string $ip
+     *
+     * @return bool
+     * @throws \Exception
+     */
     public function updateRecordIP($ip)
     {
         if (!file_exists($this->currentIPFile) && !is_writeable(dirname($this->currentIPFile))) {
@@ -92,5 +122,10 @@ abstract class UpdateBase
         return true;
     }
 
+    /**
+     * 具体的更新过程
+     *
+     * @return int 更新了几条记录
+     */
     abstract public function update();
 }
