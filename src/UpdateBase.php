@@ -26,12 +26,20 @@ abstract class UpdateBase
 
         // base config
         $baseConfigFile = $configDir . DIRECTORY_SEPARATOR . 'base.php';
-        $baseConfig = require($baseConfigFile);
+        if(file_exists($baseConfigFile)) {
+            $baseConfig = require($baseConfigFile);
+        } else {
+            $baseConfig = [];
+        }
 
         // instance specific config
         $className = get_called_class();
-        $instanceConfigFile = lcfirst(substr($className, strrpos($className, '\\') + 1)) . ".php";
-        $instanceConfig = require($configDir . DIRECTORY_SEPARATOR . $instanceConfigFile);
+        $instanceConfigFile = $configDir . DIRECTORY_SEPARATOR . lcfirst(substr($className, strrpos($className, '\\') + 1)) . ".php";
+        if(file_exists($instanceConfigFile)) {
+            $instanceConfig = require($instanceConfigFile);
+        } else {
+            $instanceConfig = [];
+        }
 
         // instance config override base config
         $config = array_merge($baseConfig, $instanceConfig);
