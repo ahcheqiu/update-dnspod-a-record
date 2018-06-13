@@ -11,37 +11,36 @@ abstract class UpdateBase
 
     protected $currentIPFile = '';
 
-    protected static $configDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config';
-
     const CURRENT_IP_URL = 'http://freegeoip.net/json/';
 
-    public function __construct($config = [])
+    /**
+     * UpdateBase constructor.
+     *
+     * @param string $configDir
+     */
+    public function __construct($configDir = '')
     {
-        $baseConfigFile = self::$configDir . DIRECTORY_SEPARATOR . 'base.php';
+        if(empty($configDir)) {
+            $configDir = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config';
+        }
+
+        // base config
+        $baseConfigFile = $configDir . DIRECTORY_SEPARATOR . 'base.php';
         $baseConfig = require($baseConfigFile);
 
+        // instance specific config
         $className = get_called_class();
         $instanceConfigFile = lcfirst(substr($className, strrpos($className, '\\') + 1)) . ".php";
-        $instanceConfig = require(self::$configDir . DIRECTORY_SEPARATOR . $instanceConfigFile);
+        $instanceConfig = require($configDir . DIRECTORY_SEPARATOR . $instanceConfigFile);
 
-        $config = array_merge($baseConfig, $instanceConfig, $config);
-
+        // instance config override base config
+        $config = array_merge($baseConfig, $instanceConfig);
         foreach ($config as $key => $value) {
             $fun = 'set' . ucfirst($key);
             if (method_exists($this, $fun)) {
                 $this->$fun($value);
             }
         }
-    }
-
-    /**
-     * 设置配置的路径
-     *
-     * @param string $path
-     */
-    public static function setConfigDir($path)
-    {
-        self::$configDir = $path;
     }
 
     /**
