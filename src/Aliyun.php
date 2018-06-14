@@ -26,7 +26,7 @@ class Aliyun extends UpdateBase
     {
         // 如果更新标志为空则中断，以免错误更新
         if(empty($this->getRemark())) {
-            return 0;
+            throw new \Exception('Remark not set');
         }
 
         $commonData = [
@@ -55,7 +55,7 @@ class Aliyun extends UpdateBase
                 ->send();
             $result = json_decode($response->raw_body, true);
             if($response->hasErrors()) {
-                return 0;
+                throw new \Exception('获取list时有错误');
             }
             $result = $result['DomainRecords']['Record'];
             foreach($result as $item) {
@@ -91,6 +91,10 @@ class Aliyun extends UpdateBase
                     $count++;
                 }
             }
+        }
+
+        if($count < 1) {
+            throw new \Exception('没有需要更新的地方');
         }
 
         return $count;
