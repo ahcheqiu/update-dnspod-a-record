@@ -64,9 +64,11 @@ abstract class UpdateBase
             throw new \Exception('IP未改变');
         }
 
-        if ($this->update()) {
+        $count = $this->update();
+        if ($count) {
             $this->updateRecordIP($currentIP);
         }
+        return $count;
     }
 
     /**
