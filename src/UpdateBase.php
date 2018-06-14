@@ -135,4 +135,22 @@ abstract class UpdateBase
      * @return int 更新了几条记录
      */
     abstract public function update();
+
+    /**
+     * @return string
+     */
+    public function getCurrentIPFile()
+    {
+        return $this->currentIPFile;
+    }
+
+    /**
+     * @param string $currentIPFile
+     * @return UpdateBase
+     */
+    public function setCurrentIPFile($currentIPFile)
+    {
+        $this->currentIPFile = $currentIPFile;
+        return $this;
+    }
 }
