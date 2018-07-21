@@ -11,7 +11,7 @@ abstract class UpdateBase
 
     protected $currentIPFile = '';
 
-    const CURRENT_IP_URL = 'http://freegeoip.net/json/';
+    const CURRENT_IP_URL = 'http://ip-api.com/json';
 
     /**
      * UpdateBase constructor.
@@ -87,7 +87,7 @@ abstract class UpdateBase
 
             $ip = '';
             if ($response->hasBody()) {
-                $ip = isset($response->body->ip) ? $response->body->ip : '';
+                $ip = isset($response->body->query) ? $response->body->query : '';
             }
 
             if (empty($ip)) {
