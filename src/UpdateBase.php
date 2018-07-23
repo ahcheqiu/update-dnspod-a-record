@@ -9,6 +9,11 @@ abstract class UpdateBase
 {
     private $currentIP = '';
 
+    private $status = [
+        'success' => [],
+        'fail' => []
+    ];
+
     protected $currentIPFile = '';
 
     const CURRENT_IP_URL = 'http://ip-api.com/json';
@@ -154,5 +159,39 @@ abstract class UpdateBase
     {
         $this->currentIPFile = $currentIPFile;
         return $this;
+    }
+
+    public function addSuccess($domain) {
+        $this->status['success'][] = $domain;
+        return $this;
+    }
+
+    public function addFail($domain) {
+        $this->status['fail'][] = $domain;
+        return $this;
+    }
+
+    public function getSuccessCount() {
+        return count($this->status['success']);
+    }
+
+    public function getFailCount() {
+        return count($this->status['fail']);
+    }
+
+    public function getCompleteCount() {
+        return $this->getSuccessCount() + $this->getFailCount();
+    }
+
+    public function getCompleteStatus() {
+        return $this->status;
+    }
+
+    public function getSuccessStatus() {
+        return array_unique($this->status['success']);
+    }
+
+    public function getFailStatus() {
+        return array_unique($this->status['fail']);
     }
 }

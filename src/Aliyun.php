@@ -88,7 +88,10 @@ class Aliyun extends UpdateBase
                 $response = Request::get($url)
                     ->send();
                 if(!$response->hasErrors()) {
+                    $this->addSuccess($finalData['RR']);
                     $count++;
+                } else {
+                    $this->addFail($finalData['RR']);
                 }
             }
         }
