@@ -34,7 +34,6 @@ class Aliyun extends UpdateBase
             'Version' => '2015-01-09',
             'SignatureMethod' => 'HMAC-SHA1',
             'SignatureVersion' => '1.0',
-            'SignatureNonce' => uniqid(),
             'AccessKeyId' => $this->getAccessKey(),
             'Timestamp' => $this->getUTCTime()
         ];
@@ -116,7 +115,10 @@ class Aliyun extends UpdateBase
      * @param string $secret
      * @return string
      */
-    public function getSignature($data, $method, $secret) {
+    public function getSignature(&$data, $method, $secret) {
+        // 每次获取新的signatureNonce
+        $data['SignatureNonce'] = uniqid();
+
         // 按顺序排列
         ksort($data);
 
