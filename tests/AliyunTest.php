@@ -30,6 +30,6 @@ class AliyunTest extends TestCase
             'Version' => '2015-01-09',
             'Timestamp' => '2016-03-24T16:41:54Z'
         ];
-        $this->assertEquals('uRpHwaSEt3J+6KQD//svCh/x+pI=', self::$instance->getSignature($data, 'GET', 'testsecret'));
+        $this->assertEquals('uRpHwaSEt3J+6KQD//svCh/x+pI=', self::$instance->getSignature($data, 'GET', 'testsecret', false));
     }
 }

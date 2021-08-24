@@ -122,10 +122,12 @@ class Aliyun extends UpdateBase
      * @param string $secret
      * @return string
      */
-    public function getSignature(array &$data, string $method, string $secret): string
+    public function getSignature(array &$data, string $method, string $secret, bool $alwaysNewNonce = true): string
     {
         // 每次获取新的signatureNonce
-        $data['SignatureNonce'] = uniqid();
+        if($alwaysNewNonce || !isset($data['SignatureNonce'])) {
+            $data['SignatureNonce'] = uniqid();
+        }
 
         // 按顺序排列
         ksort($data);
