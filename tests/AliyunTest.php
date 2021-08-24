@@ -2,20 +2,20 @@
 namespace OrzOrc\DDnsUpdate\Tests;
 
 use OrzOrc\DDnsUpdate\Aliyun;
+use PHPUnit\Framework\TestCase;
 
-class AliyunTest extends \PHPUnit_Framework_TestCase
+class AliyunTest extends TestCase
 {
-    /**
-     * @var Aliyun
-     */
-    private $instance = null;
+    private static ?Aliyun $instance = null;
 
-    public function setUp() {
-        $this->instance = new Aliyun();
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
+        self::$instance = new Aliyun();
     }
 
     public function testPercentEncode() {
-        $this->assertEquals('%20%2A~%2F', $this->instance->percentEncode(' *~/'));
+        $this->assertEquals('%20%2A~%2F', self::$instance->percentEncode(' *~/'));
     }
 
     public function testGetSignature() {
@@ -30,6 +30,6 @@ class AliyunTest extends \PHPUnit_Framework_TestCase
             'Version' => '2015-01-09',
             'Timestamp' => '2016-03-24T16:41:54Z'
         ];
-        $this->assertEquals('uRpHwaSEt3J+6KQD//svCh/x+pI=', $this->instance->getSignature($data, 'GET', 'testsecret'));
+        $this->assertEquals('uRpHwaSEt3J+6KQD//svCh/x+pI=', self::$instance->getSignature($data, 'GET', 'testsecret'));
     }
 }

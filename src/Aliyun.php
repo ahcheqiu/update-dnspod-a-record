@@ -1,32 +1,35 @@
 <?php
 namespace OrzOrc\DDnsUpdate;
 
+use DateTime;
+use DateTimeZone;
+use Exception;
 use Httpful\Exception\ConnectionErrorException;
 use Httpful\Request;
 
 class Aliyun extends UpdateBase
 {
-    private $accessKey = '';
+    private string $accessKey = '';
 
-    private $accessSecret = '';
+    private string $accessSecret = '';
 
-    private $domain = '';
+    private string $domain = '';
 
-    private $endPoint = '';
+    private string $endPoint = '';
 
-    private $remark = '';
+    private string $remark = '';
 
     /**
      * 具体的更新过程
      *
      * @return int 更新了几条记录
-     * @throws \Exception
+     * @throws Exception
      */
-    public function update ()
+    public function update (): int
     {
         // 如果更新标志为空则中断，以免错误更新
         if(empty($this->getRemark())) {
-            throw new \Exception('Remark not set');
+            throw new Exception('Remark not set');
         }
 
         $commonData = [
@@ -54,7 +57,7 @@ class Aliyun extends UpdateBase
                 ->send();
             $result = json_decode($response->raw_body, true);
             if($response->hasErrors()) {
-                throw new \Exception('获取list时有错误');
+                throw new Exception('获取list时有错误');
             }
             $result = $result['DomainRecords']['Record'];
             foreach($result as $item) {
@@ -63,11 +66,11 @@ class Aliyun extends UpdateBase
                 }
             }
         } catch (ConnectionErrorException $e) {
-            throw new \Exception("Connection Error When getting record list: " . $e->getMessage());
+            throw new Exception("Connection Error When getting record list: " . $e->getMessage());
         }
 
         if(empty($list)) {
-            throw new \Exception('没有查询到需要修改的记录');
+            throw new Exception('没有查询到需要修改的记录');
         }
 
         // 修改记录
@@ -96,15 +99,19 @@ class Aliyun extends UpdateBase
         }
 
         if($count < 1) {
-            throw new \Exception('没有需要更新的地方');
+            throw new Exception('没有需要更新的地方');
         }
 
         return $count;
     }
 
-    public function getUTCTime() {
-        $timezone = new \DateTimeZone('UTC');
-        $time = new \DateTime('now', $timezone);
+    /**
+     * @throws Exception
+     */
+    public function getUTCTime(): string
+    {
+        $timezone = new DateTimeZone('UTC');
+        $time = new DateTime('now', $timezone);
         return $time->format('Y-m-d\TH:i:s\Z');
     }
 
@@ -115,7 +122,8 @@ class Aliyun extends UpdateBase
      * @param string $secret
      * @return string
      */
-    public function getSignature(&$data, $method, $secret) {
+    public function getSignature(array &$data, string $method, string $secret): string
+    {
         // 每次获取新的signatureNonce
         $data['SignatureNonce'] = uniqid();
 
@@ -141,14 +149,15 @@ class Aliyun extends UpdateBase
      * @param string $str 待加密字符串
      * @return string
      */
-    public function percentEncode($str) {
+    public function percentEncode(string $str): string
+    {
         return str_replace(['+', '*', '%7E'], ['%20', '%2A', '~'], urlencode($str));
     }
 
     /**
      * @return string
      */
-    public function getAccessKey()
+    public function getAccessKey(): string
     {
         return $this->accessKey;
     }
@@ -157,7 +166,7 @@ class Aliyun extends UpdateBase
      * @param string $accessKey
      * @return Aliyun
      */
-    public function setAccessKey($accessKey)
+    public function setAccessKey(string $accessKey): static
     {
         $this->accessKey = $accessKey;
         return $this;
@@ -166,7 +175,7 @@ class Aliyun extends UpdateBase
     /**
      * @return string
      */
-    public function getAccessSecret()
+    public function getAccessSecret(): string
     {
         return $this->accessSecret;
     }
@@ -175,7 +184,7 @@ class Aliyun extends UpdateBase
      * @param string $accessSecret
      * @return Aliyun
      */
-    public function setAccessSecret($accessSecret)
+    public function setAccessSecret(string $accessSecret): static
     {
         $this->accessSecret = $accessSecret;
         return $this;
@@ -184,7 +193,7 @@ class Aliyun extends UpdateBase
     /**
      * @return string
      */
-    public function getDomain()
+    public function getDomain(): string
     {
         return $this->domain;
     }
@@ -193,7 +202,7 @@ class Aliyun extends UpdateBase
      * @param string $domain
      * @return Aliyun
      */
-    public function setDomain($domain)
+    public function setDomain($domain): static
     {
         $this->domain = $domain;
         return $this;
@@ -202,7 +211,7 @@ class Aliyun extends UpdateBase
     /**
      * @return string
      */
-    public function getEndPoint()
+    public function getEndPoint(): string
     {
         return $this->endPoint;
     }
@@ -211,7 +220,7 @@ class Aliyun extends UpdateBase
      * @param string $endPoint
      * @return Aliyun
      */
-    public function setEndPoint($endPoint)
+    public function setEndPoint(string $endPoint): static
     {
         $this->endPoint = $endPoint;
         return $this;
@@ -220,7 +229,7 @@ class Aliyun extends UpdateBase
     /**
      * @return string
      */
-    public function getRemark()
+    public function getRemark(): string
     {
         return $this->remark;
     }
@@ -229,7 +238,7 @@ class Aliyun extends UpdateBase
      * @param string $remark
      * @return Aliyun
      */
-    public function setRemark($remark)
+    public function setRemark(string $remark): static
     {
         $this->remark = $remark;
         return $this;
