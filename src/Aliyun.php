@@ -9,15 +9,15 @@ use Httpful\Request;
 
 class Aliyun extends UpdateBase
 {
-    private string $accessKey = '';
+    private $accessKey = '';
 
-    private string $accessSecret = '';
+    private $accessSecret = '';
 
-    private string $domain = '';
+    private $domain = '';
 
-    private string $endPoint = '';
+    private $endPoint = '';
 
-    private string $remark = '';
+    private $remark = '';
 
     /**
      * 具体的更新过程
@@ -120,6 +120,7 @@ class Aliyun extends UpdateBase
      * @param array $data 数据
      * @param string $method
      * @param string $secret
+     * @param bool $alwaysNewNonce
      * @return string
      */
     public function getSignature(array &$data, string $method, string $secret, bool $alwaysNewNonce = true): string
@@ -168,7 +169,7 @@ class Aliyun extends UpdateBase
      * @param string $accessKey
      * @return Aliyun
      */
-    public function setAccessKey(string $accessKey): static
+    public function setAccessKey(string $accessKey): Aliyun
     {
         $this->accessKey = $accessKey;
         return $this;
@@ -186,7 +187,7 @@ class Aliyun extends UpdateBase
      * @param string $accessSecret
      * @return Aliyun
      */
-    public function setAccessSecret(string $accessSecret): static
+    public function setAccessSecret(string $accessSecret): Aliyun
     {
         $this->accessSecret = $accessSecret;
         return $this;
@@ -204,7 +205,7 @@ class Aliyun extends UpdateBase
      * @param string $domain
      * @return Aliyun
      */
-    public function setDomain($domain): static
+    public function setDomain(string $domain): Aliyun
     {
         $this->domain = $domain;
         return $this;
@@ -222,7 +223,7 @@ class Aliyun extends UpdateBase
      * @param string $endPoint
      * @return Aliyun
      */
-    public function setEndPoint(string $endPoint): static
+    public function setEndPoint(string $endPoint): Aliyun
     {
         $this->endPoint = $endPoint;
         return $this;
@@ -240,7 +241,7 @@ class Aliyun extends UpdateBase
      * @param string $remark
      * @return Aliyun
      */
-    public function setRemark(string $remark): static
+    public function setRemark(string $remark): Aliyun
     {
         $this->remark = $remark;
         return $this;

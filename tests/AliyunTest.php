@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class AliyunTest extends TestCase
 {
-    private static ?Aliyun $instance = null;
+    private static $instance = null;
 
     public static function setUpBeforeClass(): void
     {
