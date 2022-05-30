@@ -10,12 +10,14 @@
     }
   ],
   "require": {
-    "nategood/httpful": ">=0.3.2",
-    "php": ">=7.3",
+    "guzzlehttp/guzzle": "^7.4",
+    "alibabacloud/darabonba-openapi": "*",
+    "alibabacloud/alidns-20150109": "2.0.1",
+    "php": ">=7.2",
     "ext-json": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": ">=9.5.0"
+    "phpunit/phpunit": ">=8.5.0"
   },
   "autoload": {
     "psr-4": {
