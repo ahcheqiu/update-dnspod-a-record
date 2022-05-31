@@ -48,7 +48,6 @@ abstract class Updater
      */
     public function update(string $ip, callable $recordFilter = null)
     {
-        // 更新远端
         foreach ($this->getRecords() as $record) {
             // IP正确不需要更新
             if ($record->getIp() == $ip) {
@@ -65,6 +64,7 @@ abstract class Updater
                 }
             }
 
+            // 执行
             $this->updateRecord(new DomainRecord($record->getId(), $record->getRecord(), $ip, $record->getRemark()));
         }
 
