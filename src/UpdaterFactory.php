@@ -6,6 +6,7 @@ use OrzOrc\DDnsUpdate\Exception\InvalidUpdaterException;
 use OrzOrc\DDnsUpdate\Implementation\FileCachedIp;
 use OrzOrc\DDnsUpdate\Implementation\IpApiComRealIpProvider;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 class UpdaterFactory
 {
@@ -17,11 +18,13 @@ class UpdaterFactory
      * @var RealIpProvider
      */
     private $realIpProvider = null;
+    private $logger;
     private $container;
 
-    public function __construct(ContainerInterface $container = null)
+    public function __construct(LoggerInterface $logger, ContainerInterface $container = null)
     {
         $this->container = $container;
+        $this->logger = $logger;
     }
 
     /**
@@ -85,7 +88,8 @@ class UpdaterFactory
          */
         $updater = $this->container->get($className);
         $updater->setCachedIpProvider($this->getCachedIpProvider())
-            ->setRealIpProvider($this->getRealIpProvider());
+            ->setRealIpProvider($this->getRealIpProvider())
+            ->setLogger($this->logger);
 
         return $updater;
     }

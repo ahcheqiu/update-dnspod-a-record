@@ -2,6 +2,8 @@
 
 namespace OrzOrc\DDnsUpdate;
 
+use Psr\Log\LoggerInterface;
+
 abstract class Updater
 {
     /**
@@ -12,6 +14,18 @@ abstract class Updater
      * @var RealIpProvider
      */
     private $realIpProvider;
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * 获取当前列表
+     * @return DomainRecord[]
+     */
+    abstract protected function getRecords(): array;
+
+    abstract protected function updateRecord(DomainRecord $record);
 
     public function shouldUpdate(): bool
     {
@@ -26,7 +40,37 @@ abstract class Updater
         return $this->cacheIpProvider->set($ip);
     }
 
-    abstract public function updateTo(string $ip): bool;
+    /**
+     * @param string $ip 目标IP
+     * @param callable|null $recordFilter 需要接受DomainRecord为参数，返回一个字符串作为被过滤掉的原因，原因为空表示需要更新
+     *
+     * @return void
+     */
+    public function update(string $ip, callable $recordFilter = null)
+    {
+        // 更新远端
+        foreach ($this->getRecords() as $record) {
+            // IP正确不需要更新
+            if ($record->getIp() == $ip) {
+                $this->logger->warning('Record[' . $record->getRecord() . '] will not update due to ip unchanged');
+                continue;
+            }
+
+            // 自定义过滤器
+            if (!is_null($recordFilter)) {
+                $filterReason = call_user_func($recordFilter, $record);
+                if (!empty($filterReason)) {
+                    $this->logger->warning('Record[' . $record->getRecord() . '] will not update due to ' . $filterReason);
+                    continue;
+                }
+            }
+
+            $this->updateRecord(new DomainRecord($record->getId(), $record->getRecord(), $ip, $record->getRemark()));
+        }
+
+        // 更新缓存
+        $this->persistIp($ip);
+    }
 
     public function setCachedIpProvider(CachedIpProvider $cacheProvider): self
     {
@@ -38,6 +82,13 @@ abstract class Updater
     public function setRealIpProvider(RealIpProvider $ipProvider): self
     {
         $this->realIpProvider = $ipProvider;
+
+        return $this;
+    }
+
+    public function setLogger(LoggerInterface $logger): self
+    {
+        $this->logger = $logger;
 
         return $this;
     }
