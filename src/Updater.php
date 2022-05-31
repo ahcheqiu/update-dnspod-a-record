@@ -35,7 +35,7 @@ abstract class Updater
         return $ip != $realIp;
     }
 
-    public function persistIp(string $ip): bool
+    protected function persistIp(string $ip): bool
     {
         return $this->cacheIpProvider->set($ip);
     }
