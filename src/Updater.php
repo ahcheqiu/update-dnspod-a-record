@@ -4,11 +4,41 @@ namespace OrzOrc\DDnsUpdate;
 
 abstract class Updater
 {
-    public function shouldUpdate(IpCacheInterface $ipCache, RealIpProvider $ipProvider): bool
+    /**
+     * @var CachedIpProvider
+     */
+    private $cacheIpProvider;
+    /**
+     * @var RealIpProvider
+     */
+    private $realIpProvider;
+
+    public function shouldUpdate(): bool
     {
-        $ip = $ipCache->get();
-        $realIp = $ipProvider->get();
+        $ip = $this->cacheIpProvider->get();
+        $realIp = $this->realIpProvider->get();
 
         return $ip != $realIp;
+    }
+
+    public function persistIp(string $ip): bool
+    {
+        return $this->cacheIpProvider->set($ip);
+    }
+
+    abstract public function updateTo(string $ip): bool;
+
+    public function setCachedIpProvider(CachedIpProvider $cacheProvider): self
+    {
+        $this->cacheIpProvider = $cacheProvider;
+
+        return $this;
+    }
+
+    public function setRealIpProvider(RealIpProvider $ipProvider): self
+    {
+        $this->realIpProvider = $ipProvider;
+
+        return $this;
     }
 }

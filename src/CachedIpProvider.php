@@ -2,7 +2,9 @@
 
 namespace OrzOrc\DDnsUpdate;
 
-interface IpCacheInterface
+interface CachedIpProvider
 {
     public function get(): string;
+
+    public function set(string $ip): bool;
 }
