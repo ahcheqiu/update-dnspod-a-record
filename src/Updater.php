@@ -21,9 +21,9 @@ abstract class Updater
 
     /**
      * 获取当前列表
-     * @return DomainRecord[]
+     * @return DomainRecord[]|\Generator
      */
-    abstract protected function getRecords(): array;
+    abstract protected function getRecords(): \Generator;
 
     abstract protected function updateRecord(DomainRecord $record);
 

@@ -19,11 +19,10 @@ class AliyunUpdater extends Updater
         $this->client = new Alidns(new Config($config));
     }
 
-    protected function getRecords(): array
+    protected function getRecords(): \Generator
     {
         $size = 10;
         $page = 1;
-        $list = [];
         do {
             try {
                 $response = $this->client->describeDomainRecords(new DescribeDomainRecordsRequest([
@@ -38,16 +37,14 @@ class AliyunUpdater extends Updater
 
             $result = $response->body->domainRecords->record;
             foreach ($result as $record) {
-                $list[] = new DomainRecord($record->recordId, $record->RR, $record->value, $record->remark);
+                yield new DomainRecord($record->recordId, $record->RR, $record->value, $record->remark);
             }
 
             // 退出条件
-            if (count($list) < $size) {
+            if (count($result) < $size) {
                 break;
             }
         } while (true);
-
-        return $list;
     }
 
     protected function updateRecord(DomainRecord $record)

@@ -8,13 +8,15 @@ class DomainRecord
     private $ip;
     private $remark;
     private $id;
+    private $more;
 
-    public function __construct(string $id, string $record, string $ip, string $remark)
+    public function __construct(string $id, string $record, string $ip, string $remark, array $more = [])
     {
         $this->id = $id;
         $this->record = $record;
         $this->ip = $ip;
         $this->remark = $remark;
+        $this->more = $more;
     }
 
     /**
@@ -47,5 +49,15 @@ class DomainRecord
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function getMore(): array
+    {
+        return $this->more;
+    }
+
+    public function getMoreInfo(string $key): string
+    {
+        return $this->getMore()[$key] ?? '';
     }
 }

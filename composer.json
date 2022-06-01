@@ -13,6 +13,7 @@
     "guzzlehttp/guzzle": "^7.4",
     "alibabacloud/darabonba-openapi": "*",
     "alibabacloud/alidns-20150109": "2.0.1",
+    "tencentcloud/dnspod": "3.0.*",
     "psr/container": "1.1.*",
     "psr/log": "1.*",
     "php": ">=7.2",
