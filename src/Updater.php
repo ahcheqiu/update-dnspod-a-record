@@ -27,10 +27,16 @@ abstract class Updater
 
     abstract protected function updateRecord(DomainRecord $record);
 
+    /**
+     * @throws \Throwable
+     */
     public function shouldUpdate(): bool
     {
-        $ip = $this->cacheIpProvider->get();
         $realIp = $this->realIpProvider->get();
+        if (empty($realIp)) {
+            throw new \RuntimeException('can not get real ip');
+        }
+        $ip = $this->cacheIpProvider->get();
 
         return $ip != $realIp;
     }
